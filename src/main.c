@@ -23,7 +23,7 @@ String outputState = "off";
 char output[2] = "5";
 
 //flag for saving data
-bool shouldSaveConfig = false;
+bool shouldSaveConfig = true;
 
 //callback notifying us of the need to save config
 void saveConfigCallback () {
@@ -94,13 +94,13 @@ void setup() {
   //sets timeout until configuration portal gets turned off
   //useful to make it all retry or go to sleep
   //in seconds
-  //wifiManager.setTimeout(120);
+  wifiManager.setTimeout(120);
 
   // fetches ssid and pass from eeprom and tries to connect
   // if it does not connect it starts an access point with the specified name
   // here  "AutoConnectAP"
   // and goes into a blocking loop awaiting configuration
-  wifiManager.autoConnect("Connect MCU to Wifi");
+  wifiManager.autoConnect("Connect MCU to Wifi","1234567890");
   // or use this for auto generated name ESP + ChipID
   //wifiManager.autoConnect();
   
@@ -116,7 +116,7 @@ void setup() {
     JsonObject& json = jsonBuffer.createObject();
     json["output"] = output;
 
-    File configFile = SPIFFS.open("/config.json", "w");
+    File configFile = LittleFS.open("/config.json", "w");
     if (!configFile) {
       Serial.println("failed to open config file for writing");
     }
